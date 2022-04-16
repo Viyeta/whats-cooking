@@ -1,0 +1,24 @@
+#loginBtn {
+  background-color: #db3c00;
+  color: white;
+}
+
+.contents {
+  margin-top: 10%;
+}
+
+#signup-contents {
+  margin-top: 5%;
+}
+.error {
+  color: #b60024;
+  font-weight: 700;
+  font-size: large;
+}
+
+.valid-feedback {
+  color: #2acc80;
+}
+.invalid-feedback {
+  color: #b60024;
+}

@@ -1,0 +1,203 @@
+<div class="container my-4" id="recipe-page-container">
+  <div class="position-relative d-flex p-0">
+    <div id="recipe-page-card">
+      <div id="recipe-page-title">
+        {{data.name}}
+      </div>
+      <div class="d-flex justify-content-center p-2">
+        {{!-- <span class="stars">{{data.overallRating}}</span> --}}
+        <div class="rating d-print-none">{{data.overallRating}}</div>
+      </div>
+    </div>
+    <img class="center-block" id="recipe-detail-image" src="{{data.recipeImageURL}}" alt="{{data.name}} Recipe" onerror="this.src='/public/images/default-recipe.png';"/>
+    <div class="recipe-card-favorite">            
+      <label class="add-fav">
+        <input id="favorite_{{data._id}}" type="checkbox" onclick="favoriteRecipe('{{data._id}}')" {{#if user}}{{#if (arrayContains user.myFavoriteRecipe data._id)}}checked{{/if}}{{/if}}>
+        <i class="icon-heart"></i>
+      </label>
+    </div>
+    {{#if (isEquals user._id data.postedBy._id)}}
+    <div class="recipe-card-edit">
+      <form action="/recipes/editform/{{data._id}}" class="inline">
+      <button class="btn btn-light" type="submit"><i class="far fa-edit"></i>Edit</button> 
+      </form>
+    </div>  
+    {{/if}}         
+    
+  </div>
+  <div class="row align-start p-3 m-0" id="recipe-page-title-info">
+    <div class="col d-flex flex-row">
+      <img class="my-auto" src="/public/images/serving-dish.png" alt="Serves" width="32" height="32" />
+      <div class="d-flex flex-column my-auto mx-3">
+        Serves<br />
+        {{data.servings}}
+      </div>
+    </div>
+    <div class="col d-flex flex-row">
+      <img class="my-auto" src="/public/images/wall-clock.png" alt="Ready in" width="32" height="32" />
+      <div class="d-flex flex-column my-auto mx-3">
+        Ready in<br />
+        {{data.cookingTime}}
+      </div>
+    </div>
+    <div class="col d-flex flex-row">
+      <img class="my-auto" src="/public/images/meal.png" alt="Meal Type" width="32" height="32" />
+      <div class="d-flex flex-column my-auto mx-3">
+        Meal Type<br />
+        {{data.mealType}}
+      </div>
+    </div>
+    <div class="col d-flex flex-row">
+      <img class="my-auto" src="/public/images/cuisine.png" alt="Cuisine" width="32" height="32" />
+      <div class="d-flex flex-column my-auto mx-3">
+        Cuisine<br />
+        {{data.cuisine}}
+      </div>
+    </div>
+  </div>
+
+  <div class="container p-0 mt-3">
+    <div>
+      <p class="fs-5 fw-light">{{data.instructions}}</p>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+          <p class="fs-2 fw-light">Ingredients</p>
+          <ul>
+            {{#each data.ingredients}}
+            <li class="fs-6 fw-light">{{text}}</li>
+            {{/each}}
+          </ul>
+      </div>
+      <div class="col">
+        <p class="fs-2 fw-light">Nutrition Information</p>
+        <div class="d-flex flex-row">
+          <div class="nutrition-border me-1">
+            <p class="nutrition-title">CALORIES</p>
+            <p class="nutrition-value">{{data.calories}} kcal</p>
+          </div>
+          <div class="nutrition-border mx-1">
+            <p class="nutrition-title">PROTIEN</p>
+            <p class="nutrition-value">{{data.protien}} g</p>
+          </div>
+          <div class="nutrition-border mx-1">
+            <p class="nutrition-title">CARBS</p>
+            <p class="nutrition-value">{{data.carb}} g</p>
+          </div>
+          <div class="nutrition-border mx-1">
+            <p class="nutrition-title">FAT</p>
+            <p class="nutrition-value">{{data.fat}} g</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>  
+  <div>
+    <button id="printModal" class="btn btn-outline-primary d-print-none" onclick="window.print()"><i class="fas fa-print"></i><br>Print</button>
+  </div>
+  <p class="fs-2 fw-light d-print-none">Instruction Video</p>
+  <div class="ratio ratio-16x9 d-print-none">
+    <iframe src="{{data.youtubeURL}}" title="YouTube video" allowfullscreen></iframe>
+  </div>
+
+  <div class="row mt-4 d-print-none">
+    <div class="col">
+    </div>
+    <div class="col-8">
+      <p class="fs-4 fw-bolder">{{reviews.length}} Responses to "{{data.name}}" recipe</p>
+      {{#each reviews}}
+      <dl class="row mt-3 border-start border-4">
+        <dt class="col-sm-3">Reviewer</dt>
+        <dd class="col-sm-9">{{user.firstname}} {{user.lastname}}</dd>
+        <dt class="col-sm-3">Review</dt>
+        <dd class="col-sm-9">{{reviewText}}</dd>
+        <dt class="col-sm-3">Sentiment</dt>
+        <dd class="col-sm-9">{{reviewSentiment}} </dd>
+        <dt class="col-sm-3">Rating</dt>
+        <dd class="col-sm-9"><div class="rating">{{rating}}</div></dd>
+        <dt class="col-sm-3">Reviewed on</dt>
+        <dd class="col-sm-9">{{dateOfReview}}</dd>
+        <dt class="col-sm-3"></dt>
+        <dd class="col-sm-9">
+          <button class="btn btn-sm btn-success" onclick="likeReview('{{_id}}');"><i class="fas fa-thumbs-up"></i></button>
+          <button class="btn btn-sm btn-danger" onclick="dislikeReview('{{_id}}');"><i class="fas fa-thumbs-down"></i></button>
+          <span class="ms-3" id="likes-{{_id}}"><span class="badge {{#if (isGEZero total_likes)}}bg-success{{else}}bg-danger{{/if}}">{{total_likes}}</span></span>
+        </dd>
+        <dt class="col-sm-3"><button class="btn btn-sm btn-primary" onclick="showCommentForm('{{_id}}')">Reply ></button></dt>
+        <dd class="col-sm-9">
+          <div class="row text-white" id="toast-div-{{_id}}" hidden>
+            <p class="text-center mt-3" id="toast-div-text-{{_id}}"></p>
+          </div>
+          <form action="/comments/{{_id}}" method="POST" id="comment-form-{{_id}}" class="comment-form" hidden>
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="comment-{{_id}}" name="comment" required></textarea>
+              <label for="comment-{{_id}}">Comments</label>
+            </div>
+            <div class="form-floating mt-2">
+              <input type="hidden" name="userId" class="userId" id="userId-{{_id}}" value="{{#if ../session.user}}{{ ../session.user._id }}{{/if}}">
+              <button class="btn btn-sm btn-primary" type="submit" onclick="return checkCommentInput('{{_id}}');">Comment</button>
+              <button class="btn btn-sm btn-secondary" onclick="return hideCommentForm('{{_id}}');">Cancel</button>
+            </div>
+          </form>
+        </dd>
+        {{#if comments.length}}
+        <dt class="col-sm-3">Comments</dt>
+        <dd class="col-sm-9">
+          {{#each comments}}
+            <dl class="row mt-1 border-start border-4">
+              <dt class="col-sm-3">{{name}}</dt>
+              <dd class="col-sm-9">
+                <p>{{comment}}</p>
+                <p><small class="text-muted">{{dateOfComment}}</small></p>
+              </dd>
+            </dl>
+          {{/each}}
+        </dd>
+        {{/if}}
+      </dl>
+      {{/each}}
+    </div>
+    <div class="col">
+    </div>
+  </div>
+
+  <div class="row mt-4 d-print-none">
+    <div class="col">
+    </div>
+    <div class="col-8">
+      <p class="fs-4 fw-bolder">Let us know what you think! Leave your review here:</p>
+      {{#unless session.user}}
+      <div class="alert alert-warning" role="alert">
+        Please <a href="/users/login">login</a> first to review the recipe!
+      </div>
+      {{/unless}}
+      <div class="row text-white" id="toast-div" hidden>
+        <p class="text-center mt-3" id="toast-div-text"></p>
+      </div>
+      <form action="/reviews/{{data._id}}" method="POST" id="review-form">
+        {{!-- <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        </div> --}}
+        <div class="mb-3">
+          <label for="reviewText" class="form-label">Comment</label>
+          <textarea class="form-control" id="reviewText" rows="3" name="reviewText" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Rate this recipe</label>
+          <div class="raty" id="raty"></div>
+        </div>
+        <div class="mb-3">
+          <input type="hidden" name="userId" id="userId" value="{{#if session.user}}{{ session.user._id }}{{/if}}">
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+
+</div>
+{{>loginalertmodal}}
+<script src="/public/js/recipe.js"></script>

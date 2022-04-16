@@ -1,0 +1,146 @@
+<div class="mx-3 my-4">
+
+  {{! Search Button }}
+  <div class="d-grid gap-2 my-3">
+    <button
+      type="button"
+      id="search-ingredients"
+      class="btn btn-outline-primary btn-block"
+      data-bs-toggle="modal"
+      data-bs-target="#searchIngredientsModal"
+    >Search ingredients<i class="fa fa-search ms-2"></i></button>
+  </div>
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary"
+      id="ingredients-toggle-button"
+    >
+      <i class="far fa-list-alt me-2"></i>
+      Added
+    </button>
+    <a class="btn btn-danger" role="button" href="/">
+      <i class="far fa-trash-alt me-2"></i>Clear All</a>
+    <button
+      type="button"
+      id="random-recipe"
+      class="btn btn-danger"
+    >Randomize</button>
+    <button
+      type="button"
+      id="all-recipe"
+      class="btn btn-success"
+    >Search</button>
+  </div>
+
+  {{! Modal Search }}
+  <div
+    class="modal fade"
+    id="searchIngredientsModal"
+    tabindex="-1"
+    aria-labelledby="searchIngredientsLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p
+            class="modal-title fs-5 fw-bolder"
+            id="searchIngredientsLabel"
+          >Search Ingredients</p>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div id="modal-search-body" class="modal-body p-3">
+          <input
+            id="ingredient-search-input"
+            name="ingredient-search-input"
+            type="text"
+            class="form-control"
+            placeholder="Search Ingredients"
+            aria-label="Search"
+          />
+          <div id="ingredient-search-results">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+          >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{!Selected Ingredients }}
+  <div id="selected-ingredients-div" class="my-2" hidden>
+    <p class="text-center m-4">No ingredients selected</p>
+  </div>
+
+  <div class="accordion" id="all-ingredients-div">
+    {{#each categorizedIngredients as |item key|}}
+      {{! Category }}
+      <div class="accordion-item my-3">
+        <div class="accordion-header" id="heading{{cleanID key}}">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapse{{cleanID key}}"
+            aria-expanded="true"
+            aria-controls="collapse{{cleanID key}}"
+          >
+            <img
+              src="/public/images/ingredients/{{cleanID key}}.png"
+              alt="{{key}}"
+              width="50"
+              height="50"
+              class="m-2"
+            />
+            <strong class="mx-2 ingredient-title">{{key}}</strong>
+          </button>
+        </div>
+        <div
+          id="collapse{{cleanID key}}"
+          class="accordion-collapse collapse show"
+          aria-labelledby="heading{{cleanID key}}"
+        >
+          <div class="ingredient-check-div accordion-body">
+            {{! Ingredient }}
+            {{#each item}}
+              {{#if checked}}
+                <input
+                  type="checkbox"
+                  id="check-{{_id}}"
+                  name="{{_id}}"
+                  class="chk-btn ingredient-check"
+                  value="{{name}}"
+                  checked
+                />
+              {{else}}
+                <input
+                  type="checkbox"
+                  id="check-{{_id}}"
+                  name="{{_id}}"
+                  class="chk-btn ingredient-check"
+                  value="{{name}}"
+                />
+              {{/if}}
+              <label
+                for="check-{{_id}}"
+                class="ingredient-label"
+              >{{name}}</label>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
