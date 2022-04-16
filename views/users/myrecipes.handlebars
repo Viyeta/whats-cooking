@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+    {{>usersidebar}}
+    </div>
+    <div class="col-9 p-2 ms-4">
+        <h1>My Recipes:</h1>
+        <a href="/recipes/form" class="btn btn-primary" role="button"> <i class="fas fa-utensils"></i> Add Recipes</a>    
+        <div class="container">
+            {{#if hasMRecipe}}
+    <div class="row row-cols-1 row-cols-md-3 g-3 g-md-3 g-lg-3 mt-3">
+      {{#each myRecipes}}
+      {{log "recipe" myRecipes}}
+        <div class="col">
+          <div class="card">
+            <img
+              src="{{recipeImageURL}}"
+              class="card-img-top recipe-card-img"
+              alt="{{name}} Recipe" onerror="this.src='/public/images/default-recipe.png';"
+            />
+            <div class="recipe-card-favorite">            
+              <a class="btn btn-primary" href="/recipes/editform/{{_id}}" role="button"><i class="far fa-edit"></i> Edit</a>         
+            </div>
+            <div class="card-body">
+              <p class="card-title fs-5 fw-bolder"><a
+                  href="/recipes/{{_id}}"
+                  target="_blank"
+                >{{name}}</a>
+                <small class="text-muted"><i
+                    class="bi bi-box-arrow-up-right"
+                  ></i></small></p>
+                  {{!-- <p class="card-title fs-5 fw-bolder"><a href="/recipes/editform/{{_id}}">edit</a></p> --}}
+              <p class="card-text">Rating:
+                <span class="ratings">{{overallRating}}</span></p>
+              <p class="card-text">{{trimString instructions 0 50}}...</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+            {{else}}
+            <p class="font-italic">No recipes posted yet.</p>
+            {{/if}}
+        </div>
+    </div>
+  </div>
+</div>

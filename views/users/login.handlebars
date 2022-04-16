@@ -1,0 +1,57 @@
+<div class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <img src="/public/images/login.png" alt="Image" class="img-fluid" />
+      </div>
+      <div class="col-md-6 contents">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="mb-4">
+              <h1>Sign In</h1>
+              <p class="mb-4 lightText">Welcome to What's Cooking!</p>
+            </div>
+            {{#if error}}
+              <p class="error">{{error}}</p>
+            {{/if}}
+            <form action="/users/login" method="POST" id="login-form">
+              <div class="mb-4">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  value="{{username}}"
+                  placeholder="Username"
+                />
+                <div class="invalid-feedback"> Invalid Username</div>
+              </div>
+              <div class="mb-4">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  value="{{password}}"
+                  placeholder="Password"
+                />
+                <div class="invalid-feedback">Password must have 6 characters
+                  without spaces</div>
+              </div>
+              <div class="d-grid gap-2">
+                <button id="loginBtn" class="btn" type="submit">Login</button>
+              </div>
+            </form>
+            <br />
+            <p>Need to register? Click here to
+              <a href="/users/signup">sign-up</a>.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="/public/js/login.js"></script>
