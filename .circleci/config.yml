@@ -37,6 +37,7 @@ jobs:
       #   environment:
       #     MYSQL_ROOT_PASSWORD: root
       #     MYSQL_DATABASE: assignment
+    executor: aws-cli/default
     steps:
       - checkout      
       # - run:
