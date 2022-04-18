@@ -19,10 +19,19 @@ let _db = undefined;
 module.exports = {
   connectToDb: async () => {
     if (!_connection) {
-      _connection = await MongoClient.connect(mongoConfig.serverUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
+      if(env == "production") {
+        let url = "mongodb+srv://" + process.env.DBUser + ":" + process.env.DBPassword + "@" + process.env.DBHost + "/" + process.env.DBName + "?retryWrites=true&w=majority";
+        _connection = await MongoClient.connect(url, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+      } else {
+        _connection = await MongoClient.connect(mongoConfig.serverUrl, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+      }
+      
       _db = await _connection.db(mongoConfig.database);
     }
 
