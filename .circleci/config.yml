@@ -2,8 +2,8 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs: 
-  aws-cli: circleci/aws-cli@3.0.0
+# orbs: 
+#   aws-cli: circleci/aws-cli@3.0.0
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -37,17 +37,17 @@ jobs:
       #   environment:
       #     MYSQL_ROOT_PASSWORD: root
       #     MYSQL_DATABASE: assignment
-    executor: aws-cli/default
+    # executor: aws-cli/default
     steps:
       - checkout      
-      # - run:
-      #     command: |
-      #       sudo apt-get update
-      #       sudo apt-get upgrade
-      #       sudo apt-get install python-setuptools            
-      #       sudo easy_install pip
-      #       sudo pip install awscli
-      #     name: Install AWS Cli
+      - run:
+          command: |
+            sudo apt-get update
+            sudo apt-get upgrade
+            sudo apt-get install python3 python3-pip python3-setuptools            
+            pip3 install --upgrade pip
+            pip3 install awscli
+          name: Install AWS Cli
       - run:
           command: aws configure set region $AWS_DEFAULT_REGION
           name: AWS default region
