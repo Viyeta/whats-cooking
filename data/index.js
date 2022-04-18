@@ -3,7 +3,7 @@ const reviewData = require("./reviews");
 const userData = require("./users");
 const commentData = require("./comments");
 const ingreData = require("./ingredients");
-const testData = require("./test");
+const testData = require("./tes");
 
 const helperData = require("./helper");
 module.exports = {
