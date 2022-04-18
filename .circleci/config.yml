@@ -40,6 +40,8 @@ jobs:
       - run:
           command: |
             sudo apt-get install python-setuptools
+            sudo apt-get update
+            sudo apt-get upgrade
             sudo easy_install pip
             sudo pip install awscli
           name: Install AWS Cli
