@@ -1,6 +1,7 @@
 "use strict";
 
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 var env = process.env.NODE_ENV || "development";
 const config = require("./config")[env];
 const mongoConfig = config;
@@ -24,6 +25,7 @@ module.exports = {
         _connection = await MongoClient.connect(url, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
+          serverApi: ServerApiVersion.v1
         });
         _db = await _connection.db(process.env.DBName);
       } else {
