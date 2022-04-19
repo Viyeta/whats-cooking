@@ -18,9 +18,74 @@ jobs:
           name: "Say hello"
           command: "echo Hello, World!"
 
+  build:
+    docker:
+      - image: circleci/node:latest
+      # - image: circleci/mysql:5.7.30
+      #   environment:
+      #    MYSQL_ROOT_PASSWORD: root
+      #    MYSQL_DATABASE: assignment
+    steps:
+      - checkout
+      - run: npm install
+  test:
+    docker:
+      - image: circleci/node:latest
+      # - image: circleci/mysql:5.7.30
+      #   environment:
+      #     MYSQL_ROOT_PASSWORD: root
+      #     MYSQL_DATABASE: assignment
+    steps:
+      - checkout      
+      - run:
+          command: |
+            sudo apt-get update
+            sudo apt-get upgrade
+            sudo apt-get install python3 python3-pip python3-setuptools            
+            pip3 install --upgrade pip
+            pip3 install awscli
+          name: Install AWS Cli
+      - run:
+          command: aws configure set region $AWS_DEFAULT_REGION
+          name: AWS default region
+      - run:
+          command: sudo apt update -y && sudo apt-get install zip unzip -y
+          name: Install Zip
+      - run:
+          command: zip -9 --exclude '*.git*' -r ssw-590-whatscooking-$CIRCLE_BUILD_NUM.zip .
+          name: Create Zip with full compression before node_modules take over
+      - run:
+          command: mkdir codedeploy_artifact && mv ssw-590-whatscooking-$CIRCLE_BUILD_NUM.zip codedeploy_artifact/
+          name: move zip file to new dir
+      - run:
+          command: npm install && npm test
+          name: Install packages and run tests
+      - run:
+          command: aws s3 cp codedeploy_artifact/ssw-590-whatscooking-$CIRCLE_BUILD_NUM.zip s3://$S3_CODEDEPLOY_BUCKET/ssw-590-whatscooking-$CIRCLE_BUILD_NUM.zip
+          name: Push artifact to s3 bucket
+      - run:
+          command: |
+                  aws deploy create-deployment \
+                    --application-name $CODEDEPLOY_APPLICATION_NAME \
+                    --deployment-config-name CodeDeployDefault.AllAtOnce \
+                    --deployment-group-name $CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME \
+                    --s3-location bucket=$S3_CODEDEPLOY_BUCKET,bundleType=zip,key=ssw-590-whatscooking-$CIRCLE_BUILD_NUM.zip \
+                    --region $AWS_DEFAULT_REGION \
+                    --file-exists-behavior OVERWRITE \
+                    --output json
+          name: CodeDeploy API call to deploy on EC2
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  version: 2
+  pr-check:
     jobs:
-      - say-hello
+      - test
+  build_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master

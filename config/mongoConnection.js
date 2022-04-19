@@ -1,6 +1,7 @@
 "use strict";
 
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 var env = process.env.NODE_ENV || "development";
 const config = require("./config")[env];
 const mongoConfig = config;
@@ -19,11 +20,21 @@ let _db = undefined;
 module.exports = {
   connectToDb: async () => {
     if (!_connection) {
-      _connection = await MongoClient.connect(mongoConfig.serverUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      _db = await _connection.db(mongoConfig.database);
+      if(env == "production") {
+        let url = "mongodb+srv://" + process.env.DBUser + ":" + process.env.DBPassword + "@" + process.env.DBHost + "/" + process.env.DBName + "?retryWrites=true&w=majority";
+        _connection = await MongoClient.connect(url, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          serverApi: ServerApiVersion.v1
+        });
+        _db = await _connection.db(process.env.DBName);
+      } else {
+        _connection = await MongoClient.connect(mongoConfig.serverUrl, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        _db = await _connection.db(mongoConfig.database);
+      }
     }
 
     return _db;

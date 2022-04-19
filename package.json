@@ -4,9 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node app.js",
     "seed": "node ./tasks/seed.js"
+  },
+  "jest": {
+    "collectCoverage": true
   },
   "author": "Project CS546 Group 4",
   "license": "ISC",
@@ -19,8 +22,13 @@
     "g-i-s": "^2.1.6",
     "handlebars": "^4.7.7",
     "mongodb": "^4.2.0",
+    "node-statsd": "^0.1.1",
+    "nodemon": "^2.0.15",
     "scrape-youtube": "^2.1.13",
     "sentiment": "^5.0.2",
     "xss": "^1.0.10"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }

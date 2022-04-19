@@ -5,7 +5,7 @@
   const allIngredientsDiv = $("#all-ingredients-div");
   const selectedIngredientsDiv = $("#selected-ingredients-div");
   const ingredientToggleButtons = $("#ingredients-toggle-button");
-  const url = "http://localhost:3000/";
+  const url = window.location.origin;
   const toastDiv = $("#toast-div");
   const toastDivText = $("#toast-div-text");
   const loadingSpinner = $(

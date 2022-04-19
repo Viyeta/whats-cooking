@@ -9,6 +9,6 @@
   },
   "production": {
     "serverUrl": "mongodb://localhost:27017/",
-    "database": "ProjectDB"
+    "database": "whatscooking"
   }
 }
