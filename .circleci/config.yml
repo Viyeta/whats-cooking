@@ -18,23 +18,17 @@ jobs:
           name: "Say hello"
           command: "echo Hello, World!"
 
-  build:
-    docker:
-      - image: circleci/node:latest
-      # - image: circleci/mysql:5.7.30
-      #   environment:
-      #    MYSQL_ROOT_PASSWORD: root
-      #    MYSQL_DATABASE: assignment
-    steps:
-      - checkout
-      - run: npm install
   test:
     docker:
       - image: circleci/node:latest
-      # - image: circleci/mysql:5.7.30
-      #   environment:
-      #     MYSQL_ROOT_PASSWORD: root
-      #     MYSQL_DATABASE: assignment
+    steps:
+      - checkout
+      - run:
+          command: npm install && npm test
+          name: Install packages and run tests
+  build:
+    docker:
+      - image: circleci/node:latest
     steps:
       - checkout      
       - run:
