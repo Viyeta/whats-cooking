@@ -2,15 +2,6 @@
 
 Final Project for CS-546: Web Programming.
 
-Group4 2021 Fall.
-
-## Group members
-
-- Priyanka Popeta
-- Suraj Nair
-- Viyeta Kansara
-- Zhenjie Zhao
-
 ## What’s Cooking – Recipe search website
 
 What’s Cooking searches and finds the recipes that match your ingredients and dietary preferences. Select ingredients from a dynamic list or enter in your own and watch as recipes update instantly. Tailor results by the selected ingredients.
